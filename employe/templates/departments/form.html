@@ -1,0 +1,32 @@
+{% extends 'employe/base.html' %}
+{% block content %}
+<div class="max-w-lg mx-auto mt-10 p-6 rounded" style="background:#ecfdf5;">
+  <h1 class="text-2xl font-bold mb-4" style="color:#065f46;">Département</h1>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="mb-2 p-2 rounded" style="background:#d1fae5;color:#065f46;">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-4">
+      {{ form.name.label_tag }}
+      {{ form.name }}
+      {% for error in form.name.errors %}
+        <div class="text-red-600">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-4">
+      {{ form.description.label_tag }}
+      {{ form.description }}
+      {% for error in form.description.errors %}
+        <div class="text-red-600">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <button class="px-4 py-2 rounded text-white" style="background:#10b981;">Enregistrer</button>
+    <a href="{% url 'liste_departements' %}" class="ml-2 px-4 py-2 rounded" style="background:#d1fae5;color:#065f46;">Annuler</a>
+  </form>
+</div>
+{% endblock %}
+

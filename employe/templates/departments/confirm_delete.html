@@ -1,0 +1,13 @@
+{% extends 'employe/base.html' %}
+{% block content %}
+<div class="max-w-lg mx-auto mt-10 p-6 rounded" style="background:#ecfdf5;">
+  <h1 class="text-2xl font-bold mb-4" style="color:#065f46;">Supprimer le département</h1>
+  <p class="mb-4">Voulez-vous vraiment supprimer "{{ departement.name }}" ? Cette action est irréversible.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button class="px-4 py-2 rounded text-white" style="background:#dc2626;">Supprimer</button>
+    <a href="{% url 'liste_departements' %}" class="ml-2 px-4 py-2 rounded" style="background:#d1fae5;color:#065f46;">Annuler</a>
+  </form>
+</div>
+{% endblock %}
+

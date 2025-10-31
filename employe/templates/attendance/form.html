@@ -1,0 +1,17 @@
+{% extends 'employe/base.html' %}
+{% block content %}
+<div class="max-w-lg mx-auto mt-10 p-6 rounded" style="background:#ecfdf5;">
+  <h1 class="text-2xl font-bold mb-4" style="color:#065f46;">Enregistrement de présence</h1>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-4">{{ form.employee.label_tag }} {{ form.employee }} {% for e in form.employee.errors %}<div class="text-red-600">{{ e }}</div>{% endfor %}</div>
+    <div class="mb-4">{{ form.work_date.label_tag }} {{ form.work_date }} {% for e in form.work_date.errors %}<div class="text-red-600">{{ e }}</div>{% endfor %}</div>
+    <div class="mb-4">{{ form.check_in.label_tag }} {{ form.check_in }} {% for e in form.check_in.errors %}<div class="text-red-600">{{ e }}</div>{% endfor %}</div>
+    <div class="mb-4">{{ form.check_out.label_tag }} {{ form.check_out }} {% for e in form.check_out.errors %}<div class="text-red-600">{{ e }}</div>{% endfor %}</div>
+    <button class="px-4 py-2 rounded text-white" style="background:#10b981;">Enregistrer</button>
+    <a href="{% url 'attendance_list' %}" class="ml-2 px-4 py-2 rounded" style="background:#d1fae5;color:#065f46;">Annuler</a>
+  </form>
+</div>
+{% endblock %}
+

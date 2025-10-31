@@ -1,0 +1,60 @@
+{% extends "employe/base.html" %}
+
+{% block content %}
+<div class="max-w-lg mx-auto mt-10 p-6 rounded" style="background:#ecfdf5;">
+  <h1 class="text-2xl font-bold mb-4" style="color:#065f46;">Employé</h1>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="mb-2 p-2 rounded" style="background:#d1fae5;color:#065f46;">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="mb-4">
+      {{ form.nom.label_tag }}
+      {{ form.nom }}
+      {% for error in form.nom.errors %}
+        <div class="text-red-600">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-4">
+      {{ form.email.label_tag }}
+      {{ form.email }}
+      {% for error in form.email.errors %}
+        <div class="text-red-600">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-4">
+      {{ form.poste.label_tag }}
+      {{ form.poste }}
+      {% for error in form.poste.errors %}
+        <div class="text-red-600">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-4">
+      {{ form.salaire.label_tag }}
+      {{ form.salaire }}
+      {% for error in form.salaire.errors %}
+        <div class="text-red-600">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-4">
+      {{ form.department.label_tag }}
+      {{ form.department }}
+      {% for error in form.department.errors %}
+        <div class="text-red-600">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-6">
+      {{ form.hire_date.label_tag }}
+      {{ form.hire_date }}
+      {% for error in form.hire_date.errors %}
+        <div class="text-red-600">{{ error }}</div>
+      {% endfor %}
+    </div>
+    <button type="submit" class="px-4 py-2 rounded text-white" style="background:#10b981;">Enregistrer</button>
+    <a href="{% url 'liste_employes' %}" class="ml-2 px-4 py-2 rounded" style="background:#d1fae5;color:#065f46;">Annuler</a>
+  </form>
+</div>
+{% endblock %}

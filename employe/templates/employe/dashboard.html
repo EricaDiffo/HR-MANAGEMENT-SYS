@@ -1,0 +1,53 @@
+{% extends 'employe/base.html' %}
+{% block content %}
+<div class="p-6" style="background:#ecfdf5;">
+  <h1 class="text-2xl font-bold mb-6" style="color:#065f46;">Tableau de bord</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="p-4 rounded" style="background:#d1fae5;">
+      <div class="text-sm" style="color:#065f46;">Employés</div>
+      <div class="text-3xl font-bold" style="color:#065f46;">{{ total_employees }}</div>
+    </div>
+    <div class="p-4 rounded" style="background:#d1fae5;">
+      <div class="text-sm" style="color:#065f46;">Départements</div>
+      <div class="text-3xl font-bold" style="color:#065f46;">{{ total_departments }}</div>
+    </div>
+    <div class="p-4 rounded" style="background:#d1fae5;">
+      <div class="text-sm" style="color:#065f46;">Présence aujourd'hui</div>
+      <div class="text-lg font-semibold" style="color:#065f46;">{{ attendance_rate }}% • Moy: {{ avg_hours|floatformat:2 }}h • Total: {{ total_hours|floatformat:2 }}h</div>
+    </div>
+  </div>
+
+  <div class="bg-white p-4 rounded">
+    <h2 class="text-xl font-semibold mb-3" style="color:#065f46;">Employés récents</h2>
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="text-left p-2">Nom</th>
+          <th class="text-left p-2">Email</th>
+          <th class="text-left p-2">Poste</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in recent_employees %}
+          <tr class="border-t">
+            <td class="p-2">{{ e.nom }}</td>
+            <td class="p-2">{{ e.email }}</td>
+            <td class="p-2">{{ e.poste }}</td>
+          </tr>
+        {% empty %}
+          <tr><td class="p-2" colspan="3">Aucun employé récent.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-6">
+    <a href="{% url 'liste_departements' %}" class="px-4 py-2 rounded text-white" style="background:#10b981;">Gérer les départements</a>
+    <a href="{% url 'liste_employes' %}" class="ml-2 px-4 py-2 rounded text-white" style="background:#059669;">Liste des employés</a>
+    <a href="{% url 'attendance_dashboard' %}" class="ml-2 px-4 py-2 rounded text-white" style="background:#2563eb;">Présence</a>
+    <a href="{% url 'leave_list' %}" class="ml-2 px-4 py-2 rounded text-white" style="background:#065f46;">Congés ({{ pending_leaves }} en attente)</a>
+  </div>
+</div>
+{% endblock %}
+

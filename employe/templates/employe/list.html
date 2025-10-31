@@ -1,0 +1,67 @@
+{% extends "employe/base.html" %}
+
+{% block content %}
+<div class="p-6" style="background:#ecfdf5;">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-bold" style="color:#065f46;">Liste des employés</h1>
+    {% if request.user.is_authenticated %}
+      {% if request.user.is_staff or request.user.is_superuser %}
+        <a href="{% url 'ajouter_employe' %}" class="px-4 py-2 rounded text-white" style="background:#10b981;">Ajouter</a>
+      {% endif %}
+    {% endif %}
+  </div>
+
+  <div class="bg-white p-4 rounded">
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="text-left p-2">Nom</th>
+          <th class="text-left p-2">Email</th>
+          <th class="text-left p-2">Poste</th>
+          <th class="text-left p-2">Salaire</th>
+          <th class="text-left p-2">Département</th>
+          <th class="text-left p-2">Date d'embauche</th>
+          <th class="text-left p-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for emp in employes %}
+          <tr class="border-t">
+            <td class="p-2">{{ emp.nom }}</td>
+            <td class="p-2">{{ emp.email }}</td>
+            <td class="p-2">{{ emp.poste }}</td>
+            <td class="p-2">{{ emp.salaire }}</td>
+            <td class="p-2">{{ emp.department.name|default:'-' }}</td>
+            <td class="p-2">{{ emp.hire_date }}</td>
+            <td class="p-2 whitespace-nowrap">
+              <a href="{% url 'modifier_employe' emp.id %}" class="px-3 py-1 rounded text-white" style="background:#2563eb;">Modifier</a>
+              <button type="button" onclick="document.getElementById('delete-emp-{{ emp.id }}').showModal()" class="ml-2 px-3 py-1 rounded text-white" style="background:#dc2626;">Supprimer</button>
+            </td>
+          </tr>
+          <!-- Delete Modal -->
+          <dialog id="delete-emp-{{ emp.id }}" class="modal">
+            <div class="modal-box">
+              <h3 class="font-bold text-lg" style="color:#065f46;">Supprimer l'employé</h3>
+              <p class="py-4">Voulez-vous vraiment supprimer "{{ emp.nom }}" ?</p>
+              <div class="modal-action">
+                <form method="dialog">
+                  <button class="btn">Annuler</button>
+                </form>
+                <form method="post" action="{% url 'supprimer_employe' emp.id %}">
+                  {% csrf_token %}
+                  <button class="btn" style="background:#dc2626;color:white;">Supprimer</button>
+                </form>
+              </div>
+            </div>
+            <form method="dialog" class="modal-backdrop">
+              <button>close</button>
+            </form>
+          </dialog>
+        {% empty %}
+          <tr><td class="p-2" colspan="7">Aucun employé.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

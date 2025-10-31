@@ -1,0 +1,52 @@
+{% extends 'employe/base.html' %}
+{% block content %}
+<div class="p-6" style="background:#ecfdf5;">
+  <div class="flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-bold" style="color:#065f46;">Demandes de congé</h1>
+    <a href="{% url 'leave_create' %}" class="px-4 py-2 rounded text-white" style="background:#10b981;">Nouvelle demande</a>
+  </div>
+  {% if messages %}
+    {% for message in messages %}
+      <div class="mb-2 p-2 rounded" style="background:#d1fae5;color:#065f46;">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+  <div class="bg-white p-4 rounded">
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="text-left p-2">Employé</th>
+          <th class="text-left p-2">Type</th>
+          <th class="text-left p-2">Période</th>
+          <th class="text-left p-2">Statut</th>
+          <th class="text-left p-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for l in leaves %}
+          <tr class="border-t">
+            <td class="p-2">{{ l.employee.nom }}</td>
+            <td class="p-2">{{ l.get_type_display }}</td>
+            <td class="p-2">{{ l.start_date }} → {{ l.end_date }}</td>
+            <td class="p-2">{{ l.get_status_display }}</td>
+            <td class="p-2">
+              <a href="{% url 'leave_edit' l.id %}" class="px-3 py-1 rounded text-white" style="background:#2563eb;">Modifier</a>
+              <a href="{% url 'leave_delete' l.id %}" class="ml-2 px-3 py-1 rounded text-white" style="background:#dc2626;">Supprimer</a>
+              {% if request.user.is_authenticated %}
+                {% if request.user.is_staff or request.user.is_superuser %}
+                  {% if l.status == 'pending' %}
+                    <a href="{% url 'leave_approve' l.id %}" class="ml-2 px-3 py-1 rounded text-white" style="background:#059669;">Approuver</a>
+                    <a href="{% url 'leave_reject' l.id %}" class="ml-2 px-3 py-1 rounded text-white" style="background:#b91c1c;">Rejeter</a>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td class="p-2" colspan="5">Aucune demande.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+

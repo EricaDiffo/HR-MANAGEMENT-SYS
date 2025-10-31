@@ -1,0 +1,70 @@
+{% extends 'employe/base.html' %}
+{% block content %}
+<div class="p-6" style="background:#ecfdf5;">
+  <h1 class="text-2xl font-bold mb-6" style="color:#065f46;">Présence - Aujourd'hui ({{ today }})</h1>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div class="p-4 rounded" style="background:#d1fae5;">
+      <div class="text-sm" style="color:#065f46;">Taux de présence</div>
+      <div class="text-3xl font-bold" style="color:#065f46;">{{ attendance_rate }}%</div>
+    </div>
+    <div class="p-4 rounded" style="background:#d1fae5;">
+      <div class="text-sm" style="color:#065f46;">Heures moyennes</div>
+      <div class="text-3xl font-bold" style="color:#065f46;">{{ avg_hours|floatformat:2 }}</div>
+    </div>
+    <div class="p-4 rounded" style="background:#d1fae5;">
+      <div class="text-sm" style="color:#065f46;">Total heures</div>
+      <div class="text-3xl font-bold" style="color:#065f46;">{{ total_hours|floatformat:2 }}</div>
+    </div>
+  </div>
+
+  <div class="bg-white p-4 rounded">
+    <h2 class="text-xl font-semibold mb-3" style="color:#065f46;">Enregistrements</h2>
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th class="text-left p-2">Employé</th>
+          <th class="text-left p-2">Arrivée</th>
+          <th class="text-left p-2">Départ</th>
+          <th class="text-left p-2">Heures</th>
+          <th class="text-left p-2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+          <tr class="border-t">
+            <td class="p-2">{{ r.employee.nom }}</td>
+            <td class="p-2">{{ r.check_in|date:'H:i' }}</td>
+            <td class="p-2">{{ r.check_out|date:'H:i' }}</td>
+            <td class="p-2">{{ r.worked_hours|floatformat:2 }}</td>
+            <td class="p-2">
+              {% if not r.check_in %}
+                <a href="{% url 'clock_in' r.employee.id %}" class="px-3 py-1 rounded text-white" style="background:#10b981;">Entrée</a>
+              {% elif not r.check_out %}
+                <a href="{% url 'clock_out' r.employee.id %}" class="px-3 py-1 rounded text-white" style="background:#059669;">Sortie</a>
+              {% endif %}
+              {% if request.user.is_authenticated %}
+                {% if request.user.is_staff or request.user.is_superuser %}
+                  <a href="{% url 'attendance_edit' r.id %}" class="ml-2 px-3 py-1 rounded text-white" style="background:#2563eb;">Modifier</a>
+                  <a href="{% url 'attendance_delete' r.id %}" class="ml-2 px-3 py-1 rounded text-white" style="background:#dc2626;">Supprimer</a>
+                {% endif %}
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td class="p-2" colspan="5">Aucun pointage aujourd'hui.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if request.user.is_authenticated %}
+    {% if request.user.is_staff or request.user.is_superuser %}
+      <div class="mt-6">
+        <a href="{% url 'attendance_create' %}" class="px-4 py-2 rounded text-white" style="background:#10b981;">Créer un enregistrement</a>
+      </div>
+    {% endif %}
+  {% endif %}
+</div>
+{% endblock %}
+
