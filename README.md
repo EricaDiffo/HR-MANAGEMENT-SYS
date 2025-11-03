@@ -32,28 +32,6 @@ LEARN DJANGO/
 ```bash
 python -m venv env
 ./env/Scripts/activate  # PowerShell on Windows
-pip install django supabase
-```
-
-If you prefer pinning versions:
-```bash
-pip install "django>=5,<6" "supabase>=2"
-```
-
-### Environment (optional: Supabase Auth)
-Set these only if you want to use Supabase Auth; otherwise the app uses Django auth.
-
-PowerShell (Windows):
-```powershell
-$env:SUPABASE_URL = "https://YOUR-PROJECT.supabase.co"
-$env:SUPABASE_ANON_KEY = "YOUR-ANON-KEY"
-```
-
-Bash (macOS/Linux):
-```bash
-export SUPABASE_URL="https://YOUR-PROJECT.supabase.co"
-export SUPABASE_ANON_KEY="YOUR-ANON-KEY"
-```
 
 ### Database Setup
 ```bash
